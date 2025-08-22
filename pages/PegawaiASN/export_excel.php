@@ -1,47 +1,44 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 if (!isset($_SESSION['login'])) {
   header("Location: login.php");
   exit;
 }
 
-require __DIR__ . '/../../vendor/autoload.php';
 include __DIR__ . '/../../config/db.php';
+require __DIR__ . '/libs/SimpleXLSXGen.php';
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Shuchkin\SimpleXLSXGen;
 
-$spreadsheet = new Spreadsheet();
-$sheet = $spreadsheet->getActiveSheet();
 
-// Judul kolom (header Excel)
-$sheet->fromArray([
-  [
-    'No', 'Nama', 'NIP', 'NIK', 'NPWP', 'Tempat Lahir', 'Tanggal Lahir', 'TMT CPNS',
-    'Golongan Terakhir', 'TMT Golongan Terakhir', 'Jabatan', 'Angka Kredit Terakhir',
-    'TMT Jabatan', 'TMT Masuk', 'Eselon', 
-    'Masa Kerja KP (Thn)', 'Masa Kerja KP (Bln)',
-    'Masa Kerja PNS (Thn)', 'Masa Kerja PNS (Bln)',
-    'Masa Kerja Golongan (Thn)', 'Masa Kerja Golongan (Bln)',
-    'Rencana KGB', 'Kenaikan Pangkat', 
-    'Usia (Thn)', 'Usia (Bln)', 'Tahun Lahir', 'TMT Pensiun',
-    'Bidang', 'Seksi', 'Ruang', 'Diklat',
-    'Pendidikan Terakhir', 'Program Studi', 'Tahun Pendidikan', 'Universitas',
-    'Agama', 'Status', 'Nama Suami/Istri', 'No. Akte', 'Tgl. Akta Nikah',
-    'Anak', 'STR', 'Tgl STR', 'Masa Berlaku STR', 
-    'SIP', 'Tgl SIP',
-    'Alamat', 'No Telp', 'Email', 
-    'Kontak Darurat', 'Telp Darurat',
-    'Jenis Kelamin', 'Keterangan'
-  ]
-], null, 'A1');
+// Header kolom
+$data = [[
+  'No', 'Nama', 'NIP', 'NIK', 'NPWP', 'Tempat Lahir', 'Tanggal Lahir', 'TMT CPNS',
+  'Golongan Terakhir', 'TMT Golongan Terakhir', 'Jabatan', 'Angka Kredit Terakhir',
+  'TMT Jabatan', 'TMT Masuk', 'Eselon', 
+  'Masa Kerja KP (Thn)', 'Masa Kerja KP (Bln)',
+  'Masa Kerja PNS (Thn)', 'Masa Kerja PNS (Bln)',
+  'Masa Kerja Golongan (Thn)', 'Masa Kerja Golongan (Bln)',
+  'Rencana KGB', 'Kenaikan Pangkat', 
+  'Usia (Thn)', 'Usia (Bln)', 'Tahun Lahir', 'TMT Pensiun',
+  'Bidang', 'Seksi', 'Ruang', 'Diklat',
+  'Pendidikan Terakhir', 'Program Studi', 'Tahun Pendidikan', 'Universitas',
+  'Agama', 'Status', 'Nama Suami/Istri', 'No. Akte', 'Tgl. Akta Nikah',
+  'Anak', 'STR', 'Tgl STR', 'Masa Berlaku STR', 
+  'SIP', 'Tgl SIP',
+  'Alamat', 'No Telp', 'Email', 
+  'Kontak Darurat', 'Telp Darurat',
+  'Jenis Kelamin', 'Keterangan'
+]];
 
-$query = mysqli_query($koneksi, "SELECT * FROM pegawai");
+// Ambil data
+$query = mysqli_query($koneksi, "SELECT * FROM pegawai_asn");
 $no = 1;
-$rowIndex = 2;
-
 while ($row = mysqli_fetch_assoc($query)) {
-  $sheet->fromArray([
+  $data[] = [
     $no++,
     $row['nama'],
     $row['nip'],
@@ -95,20 +92,10 @@ while ($row = mysqli_fetch_assoc($query)) {
     $row['telp_darurat'],
     $row['jenis_kelamin'],
     $row['keterangan']
-  ], null, 'A' . $rowIndex);
-  $rowIndex++;
+  ];
 }
 
-// Supaya kolom auto fit
-foreach (range('A', $sheet->getHighestColumn()) as $col) {
-  $sheet->getColumnDimension($col)->setAutoSize(true);
-}
-
-// Output Excel
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment; filename="data_pegawai_asn.xlsx"');
-header('Cache-Control: max-age=0');
-
-$writer = new Xlsx($spreadsheet);
-$writer->save('php://output');
+// Buat file Excel & download
+$xlsx = SimpleXLSXGen::fromArray($data);
+$xlsx->downloadAs('data_pegawai_asn.xlsx');
 exit;
