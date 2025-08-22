@@ -60,12 +60,11 @@ if (isset($_GET['detail_id'])) {
       overflow: hidden;
     }
 
-    .sidebar {
+   .sidebar {
       width: 250px;
       background: linear-gradient(to bottom, #2c3e50, #34495e);
       color: #fff;
       padding: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
     }
 
@@ -75,7 +74,7 @@ if (isset($_GET['detail_id'])) {
       margin-bottom: 20px;
     }
 
-    .sidebar a {
+      .sidebar a {
       display: flex;
       align-items: center;
       text-decoration: none;
@@ -83,9 +82,10 @@ if (isset($_GET['detail_id'])) {
       font-weight: 500;
       padding: 10px 14px;
       border-radius: 8px;
-      transition: background 0.3s, color 0.3s;
       margin-bottom: 10px;
+      transition: background 0.3s, color 0.3s;
     }
+
 
     .sidebar a:hover,
     .sidebar a.active {
@@ -93,13 +93,16 @@ if (isset($_GET['detail_id'])) {
       color: white;
     }
 
+  
     .main-content {
       flex: 1;
       padding: 40px 50px;
+      overflow: hidden;
+      position: relative;
     }
 
     .header-box {
-      background: #ffffff;
+      background: #fbfbfb;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -109,7 +112,7 @@ if (isset($_GET['detail_id'])) {
       margin-bottom: 30px;
     }
 
-    h2.page-title {
+    .page-title {
       font-size: 22px;
       color: #2c3e50;
     }
@@ -138,7 +141,22 @@ if (isset($_GET['detail_id'])) {
       font-size: 14px;
     }
 
+        .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
     .button-group a {
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+       .btn-blue,
+    .btn-green {
       padding: 8px 12px;
       border-radius: 6px;
       color: white;
@@ -154,31 +172,24 @@ if (isset($_GET['detail_id'])) {
     .btn-green {
       background-color: #2ecc71;
     }
-
-    .btn-red {
-      background-color: #e74c3c;
-    }
-
     .table-scroll {
-      max-height: 680px;
-      overflow-y: auto;
       overflow-x: auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      position: relative;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      overflow-y: auto;
+      max-height: 680px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
     table {
       width: 100%;
-      min-width: 1200px;
+      min-width: 1400px;
       border-collapse: collapse;
       background-color: white;
     }
 
-    thead th {
+   thead th {
       background: linear-gradient(to right, #2c3e50, #34495e);
       color: white;
       position: sticky;
@@ -205,13 +216,12 @@ if (isset($_GET['detail_id'])) {
       background-color: #f9fbfc;
     }
 
-    .action-container {
+      .action-container {
       display: flex;
       gap: 6px;
-      align-items: center;
       justify-content: start;
-      flex-wrap: nowrap;
     }
+
 
     .action-link {
       padding: 6px 10px;
